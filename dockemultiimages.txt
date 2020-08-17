@@ -1,0 +1,37 @@
+docker-compose file:
+Run Multiple images using docker-compose yml or yaml file
+docker pull nginx
+docker pull mongodb:3.6.6
+docker volume create niginxhome
+docker volume create mongohome
+docker volume inspect <name of the volume>
+docker volume ls
+docker volume prune
+
+Compose docker-compose.yml or yaml file
+
+version: '3'
+services:
+   mongovol:
+     restart: always
+     image: mongo:3.6.6
+     container_name: mongoctr
+     environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+     ports:
+       - "27017:27017"
+     volumes:
+       - /var/lib/docker/volumes/mongohome/_data:/data/db
+   ngnix:
+     restart: always
+     image: nginx:latest
+     container_name: nginxctr
+     ports:
+       - "14256:443"
+       - "14243:80"
+     volumes:
+      - /var/lib/docker/volumes/nginxhome/_data:/data/db
+
+docker-compose down --rm all
+docker-compose up -d
